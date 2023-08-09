@@ -14,6 +14,8 @@ all_links=[]
 
 for links in anchores:
     linktext=url+links.get('href')
+    if linktext.startswith('/'):
+        linktext=url+linktext[1:]
     all_links.append(linktext)
     
 
