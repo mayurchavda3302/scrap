@@ -1,6 +1,6 @@
 import requests
 from bs4 import BeautifulSoup
-import pandas as pd
+import csv
 import time
 
 url="https://ecolabelindex.com/ecolabels/"
@@ -9,8 +9,7 @@ r=requests.get(url)
 time.sleep(2)
 htmlcontent=r.content
 soup=BeautifulSoup(htmlcontent,'html.parser')
-#here th soup wii copy the html of the link 
-# print(soup)
+
 
 anchores=soup.find_all('a')
 all_links=[]
