@@ -1,30 +1,27 @@
 import requests
 from bs4 import BeautifulSoup
-
 import time
 import csv
-url="https://ecolabelindex.com/ecolabels/"
-r=requests.get(url)
+
+url = "https://ecolabelindex.com/ecolabels/"
+r = requests.get(url)
 time.sleep(2)
-htmlcontent=r.content
-soup=BeautifulSoup(htmlcontent,'html.parser')
-anchores=soup.find_all('a')
-all_links=[]
+htmlcontent = r.content
+soup = BeautifulSoup(htmlcontent, 'html.parser')
 
-
-for links in anchores:
-    linktext=url+links.get('href')
-    if linktext.startswith('/'):
-        linktext=url+linktext[1:]
-    all_links.append(linktext)
-    
-
-csv_file="links.csv"
-with open(csv_file,'w',newline='',encoding='utf-8') as file:
-    csv_write=csv.writer(file)
+csv_file = "links.csv"
+with open(csv_file, 'w') as file:
+    csv_write = csv.writer(file)
     csv_write.writerow(['links'])
-    for link in all_links:
-        csv_write.writerow([link])
+    all_link=set()
+    for link in soup.find_all('a'):
+        linktext = link.get('href')
+        if linktext and not linktext.startswith(('http', 'https')):
+            linktext = url + linktext if linktext.startswith('/') else linktext 
+           
+            if linktext not in all_link:
+               csv_write.writerow([linktext])
+               all_link.add(linktext)
+               
 
-print(f"the links  wii be store in {csv_file} file ")
-
+print(f"The links will be stored in {csv_file} file.")
